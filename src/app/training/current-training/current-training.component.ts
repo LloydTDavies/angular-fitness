@@ -9,6 +9,7 @@ import { StopTrainingComponent } from '../stop-training.component';
 })
 export class CurrentTrainingComponent implements OnInit {
   @Output() trainingFinished = new EventEmitter<void>();
+
   progress = 0;
   timer: NodeJS.Timer;
 
