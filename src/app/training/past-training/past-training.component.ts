@@ -1,4 +1,10 @@
-import { Component, OnInit, ViewChild, AfterViewInit, OnDestroy } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild,
+  AfterViewInit,
+  OnDestroy
+} from '@angular/core';
 import { TrainingService } from '../training.service';
 import { Exercise } from '../exercise.model';
 import { MatTableDataSource, MatSort, MatPaginator } from '@angular/material';
@@ -20,9 +26,11 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(private trainingService: TrainingService) {}
 
   ngOnInit() {
-    this.finishedSubscription = this.trainingService.finishedExercisesChanged.subscribe(data => {
-      this.pastExercises.data = data;
-    });
+    this.finishedSubscription = this.trainingService.finishedExercisesChanged.subscribe(
+      data => {
+        this.pastExercises.data = data;
+      }
+    );
     this.trainingService.fetchPastExercises();
   }
 
@@ -36,6 +44,8 @@ export class PastTrainingComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.finishedSubscription.unsubscribe();
+    if (this.finishedSubscription) {
+      this.finishedSubscription.unsubscribe();
+    }
   }
 }

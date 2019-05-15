@@ -7,7 +7,6 @@
     </mat-form-field>
     <mat-form-field hintLabel="Should be at least 6 characters long">
       <input type="password" matInput placeholder="Your Password" ngModel name="password" required minlength="6">
-      <!-- <mat-hint>Should be at least 6 characters long</mat-hint> -->
       <mat-error>Has to be at least 6 characters long</mat-error>
     </mat-form-field>
     <mat-form-field>
@@ -20,6 +19,7 @@
     <mat-checkbox ngModel name="agree" color="primary" required>
       Agree to Terms and Conditions.
     </mat-checkbox>
-    <button [disabled]="!f.valid" type="submit" mat-raised-button color="primary">Submit</button>
+    <button *ngIf="!isLoading" [disabled]="!f.valid" type="submit" mat-raised-button color="primary">Submit</button>
+    <mat-spinner *ngIf="isLoading"></mat-spinner>
   </form>
 </section>
