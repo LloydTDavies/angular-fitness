@@ -5,8 +5,10 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { AngularFireAuth } from 'angularfire2/auth';
 import { TrainingService } from '../training/training.service';
-import { MatSnackBar } from '@angular/material';
 import { UIService } from '../shared/ui.service';
+import { Store } from '@ngrx/store';
+
+import * as fromApp from '../store/app.reducer';
 @Injectable()
 export class AuthService {
   private user: User;
@@ -18,8 +20,8 @@ export class AuthService {
     private router: Router,
     private afAuth: AngularFireAuth,
     private trainingService: TrainingService,
-    private snackbar: MatSnackBar,
-    private uiService: UIService
+    private uiService: UIService,
+    private store: Store<{ ui: fromApp.State }>
   ) {}
 
   initAuthListener() {
@@ -38,27 +40,27 @@ export class AuthService {
   }
 
   registerUser(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({type: 'START_LOADING'});
     this.afAuth.auth
       .createUserWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        this.uiService.loadingStateChanged.next(false);
+        this.store.dispatch({type: 'STOP_LOADING'});
       })
       .catch(error => {
-        this.uiService.loadingStateChanged.next(false);
+        this.store.dispatch({type: 'STOP_LOADING'});
         this.uiService.showSnackbar(error.message, null, 3000);
       });
   }
 
   login(authData: AuthData) {
-    this.uiService.loadingStateChanged.next(true);
+    this.store.dispatch({type: 'START_LOADING'});
     this.afAuth.auth
       .signInWithEmailAndPassword(authData.email, authData.password)
       .then(result => {
-        this.uiService.loadingStateChanged.next(false);
+        this.store.dispatch({type: 'STOP_LOADING'});
       })
       .catch(error => {
-        this.uiService.loadingStateChanged.next(false);
+        this.store.dispatch({type: 'STOP_LOADING'});
         this.uiService.showSnackbar(error.message, null, 3000);
       });
   }
