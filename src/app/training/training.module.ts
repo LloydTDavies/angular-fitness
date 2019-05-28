@@ -8,6 +8,8 @@ import { StopTrainingComponent } from './stop-training.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '../shared/shared.module';
 import { TrainingRoutingModule } from './training-routing.module';
+import { StoreModule } from '@ngrx/store';
+import { trainingReducer } from '../store/reducers/training.reducer';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { TrainingRoutingModule } from './training-routing.module';
   imports: [
     SharedModule,
     ReactiveFormsModule,
-    TrainingRoutingModule
+    TrainingRoutingModule,
+    StoreModule.forFeature('training', trainingReducer)
   ],
   exports: [],
   entryComponents: [StopTrainingComponent]

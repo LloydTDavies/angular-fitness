@@ -2,42 +2,37 @@ import {
   Component,
   OnInit,
   EventEmitter,
-  Output,
-  OnDestroy
+  Output
 } from '@angular/core';
+import { NgForm } from '@angular/forms';
+
+import { Subscription, Observable } from 'rxjs';
+
 import { TrainingService } from '../training.service';
 import { Exercise } from '../exercise.model';
-import { NgForm } from '@angular/forms';
-import { Subscription } from 'rxjs';
-import { UIService } from 'src/app/shared/ui.service';
+
+import { Store, select } from '@ngrx/store';
+import * as fromApp from '../../store/reducers/app.reducer';
+import * as fromTraining from '../../store/reducers/training.reducer';
 
 @Component({
   selector: 'app-new-training',
   templateUrl: './new-training.component.html',
   styleUrls: ['./new-training.component.scss']
 })
-export class NewTrainingComponent implements OnInit, OnDestroy {
+export class NewTrainingComponent implements OnInit {
   @Output() trainingStart = new EventEmitter<void>();
-  exercises: Exercise[] = [];
-  isLoading = false;
-
-  private trainingSubscritpion: Subscription;
-  private loadingSubscritpion: Subscription;
+  exercises$: Observable<Exercise[]>;
+  isLoading$: Observable<boolean>;
 
   constructor(
     private trainingService: TrainingService,
-    private uiService: UIService
+    private store: Store<fromTraining.State>
   ) {}
 
   ngOnInit() {
-    this.loadingSubscritpion = this.uiService.loadingStateChanged.subscribe(
-      loading => (this.isLoading = loading)
-    );
-    this.trainingSubscritpion = this.trainingService.exercisesChanged.subscribe(
-      data => {
-        this.exercises = data;
-      }
-    );
+    this.isLoading$ = this.store.pipe(select(fromApp.getIsLoading));
+    this.exercises$ = this.store.pipe(select(fromTraining.getAvailableExercises));
     this.fetchExercises();
   }
 
@@ -49,12 +44,4 @@ export class NewTrainingComponent implements OnInit, OnDestroy {
     this.trainingService.startExercise(form.value.exercise);
   }
 
-  ngOnDestroy() {
-    if (this.trainingSubscritpion) {
-      this.trainingSubscritpion.unsubscribe();
-    }
-    if (this.loadingSubscritpion) {
-      this.loadingSubscritpion.unsubscribe();
-    }
-  }
 }
