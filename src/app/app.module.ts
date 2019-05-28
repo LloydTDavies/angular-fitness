@@ -3,6 +3,9 @@ import { NgModule } from '@angular/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ReactiveFormsModule } from '@angular/forms';
 
+import { StoreModule } from '@ngrx/store';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
@@ -22,6 +25,7 @@ import { UIService } from './shared/ui.service';
 import { AuthModule } from './auth/auth.module';
 import { SharedModule } from './shared/shared.module';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { reducers } from './store/reducers/app.reducer';
 
 @NgModule({
   declarations: [
@@ -38,7 +42,9 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
     ReactiveFormsModule,
     AngularFireModule.initializeApp(environment.firebase),
     AuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule,
+    StoreModule.forRoot(reducers),
+    StoreDevtoolsModule.instrument({ name: 'App'}),
   ],
   providers: [AuthService, TrainingService, UIService],
   bootstrap: [AppComponent]

@@ -10,9 +10,9 @@
         <a routerLink="/">NG-Fit-Tracker</a>
     </div>
     <div fxFlex fxLayoutAlign="flex-end" fxLayoutGap="10px" fxHide.xs>
-        <a *ngIf="!isAuth" routerLink="/signup">Signup</a>
-        <a *ngIf="!isAuth" routerLink="/login">Login</a>
-        <a *ngIf="isAuth" routerLink="/training">Training</a>
-        <a class="btn-logout" *ngIf="isAuth" (click)="onLogout()">Logout</a>
+        <a *ngIf="!(isAuth$ | async)" routerLink="/signup">Signup</a>
+        <a *ngIf="!(isAuth$ | async)" routerLink="/login">Login</a>
+        <a *ngIf="isAuth$ | async" routerLink="/training">Training</a>
+        <a class="btn-logout" *ngIf="isAuth$ | async" (click)="onLogout()">Logout</a>
     </div>
 </mat-toolbar>
